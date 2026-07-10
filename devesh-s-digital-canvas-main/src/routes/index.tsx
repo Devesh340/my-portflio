@@ -6,7 +6,7 @@ import {
   Github, Linkedin, Send, GraduationCap, Briefcase, Award, Code2, Database,
   Wrench, Users, Sparkles, ExternalLink, FileText, Cpu, Globe, Brain,
 } from "lucide-react";
-import avatar from "@/assets/devesh-avatar.jpg";
+const avatar = "/profile.jpg.jpeg";
 
 export const Route = createFileRoute("/")({
   component: Portfolio,
@@ -872,6 +872,16 @@ function Experience() {
         "Worked with data cleaning, modeling and visualization.",
       ],
     },
+    {
+      role: "Full Stack Web Development Intern",
+      company: "BridgeAi",
+      period: "01 June 2026 – 30 June 2026",
+      points: [
+        "Successfully completed a one-month Full Stack Web Development internship at BridgeAi.",
+        "Worked on web development concepts and strengthened frontend and backend development skills.",
+        "Demonstrated sincerity, persistence, and dedication throughout the training.",
+      ],
+    },
   ];
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -915,9 +925,9 @@ function Experience() {
 
 function Certifications() {
   const items = [
-    { title: "Microsoft Azure AI Fundamentals", issuer: "Microsoft", tag: "AI-900" },
+    { title: "Microsoft Azure AI Fundamentals", issuer: "Microsoft", tag: "AI-900", certificate: "/certificate-azure.png" },
     { title: "Python Programming Internship", issuer: "InternPE", tag: "2025" },
-    { title: "Power BI Internship", issuer: "Mindful AI", tag: "2025" },
+    { title: "Power BI Internship", issuer: "Mindful AI", tag: "2025", certificate: "/certificate-powerbi.png" },
   ];
   return (
     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
@@ -942,9 +952,16 @@ function Certifications() {
           </div>
           <h4 className="mt-4 font-display text-lg font-semibold">{c.title}</h4>
           <p className="text-sm text-muted-foreground">Issued by {c.issuer}</p>
-          <div className="mt-5 flex items-center gap-2 text-sm text-[color:var(--brand-cyan)]">
-            <FileText className="h-4 w-4" /> Verified certificate
-          </div>
+          {c.certificate && (
+            <a
+              href={c.certificate}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 text-sm text-[color:var(--brand-cyan)]"
+            >
+              <FileText className="h-4 w-4" /> View certificate
+            </a>
+          )}
         </motion.div>
       ))}
     </div>
