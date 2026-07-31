@@ -972,20 +972,51 @@ function Certifications() {
 
 function Contact() {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const [sent, setSent] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
-  function submit(e: FormEvent) {
+  async function submit(e: FormEvent) {
     e.preventDefault();
-    setErr(null);
-    if (!form.name.trim() || form.name.length > 100) return setErr("Please enter your name.");
+    setStatus(null);
+
+    if (!form.name.trim() || form.name.length > 100)
+      return setStatus({ type: "error", message: "Please enter your name." });
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) || form.email.length > 255)
-      return setErr("Please enter a valid email.");
-    if (!form.subject.trim() || form.subject.length > 150) return setErr("Please add a subject.");
-    if (!form.message.trim() || form.message.length > 1500) return setErr("Please write a message.");
-    setSent(true);
-    setForm({ name: "", email: "", subject: "", message: "" });
-    setTimeout(() => setSent(false), 4000);
+      return setStatus({ type: "error", message: "Please enter a valid email." });
+    if (!form.subject.trim() || form.subject.length > 150)
+      return setStatus({ type: "error", message: "Please add a subject." });
+    if (!form.message.trim() || form.message.length > 1500)
+      return setStatus({ type: "error", message: "Please write a message." });
+
+    setLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || 'Unable to send message.');
+      }
+
+      setStatus({ type: 'success', message: 'Message sent successfully!' });
+      setForm({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      console.error('Contact submit error:', error);
+      setStatus({
+        type: 'error',
+        message:
+          error instanceof Error
+            ? error.message
+            : 'Something went wrong. Please try again later.',
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   const cards = [
@@ -1043,14 +1074,18 @@ function Contact() {
           />
         </div>
 
-        {err && <p className="mt-3 text-sm text-destructive">{err}</p>}
-        {sent && <p className="mt-3 text-sm text-[color:var(--brand-cyan)]">Thanks! Your message has been queued.</p>}
+        {status && (
+          <p className={`mt-3 text-sm ${status.type === 'success' ? 'text-[color:var(--brand-cyan)]' : 'text-destructive'}`}>
+            {status.message}
+          </p>
+        )}
 
         <button
           type="submit"
-          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gradient-bg px-5 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02] sm:w-auto"
+          disabled={loading}
+          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl gradient-bg px-5 py-3 text-sm font-semibold text-white transition-transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
         >
-          Send Message <Send className="h-4 w-4" />
+          {loading ? 'Sending...' : 'Send Message'} <Send className="h-4 w-4" />
         </button>
       </form>
     </div>
