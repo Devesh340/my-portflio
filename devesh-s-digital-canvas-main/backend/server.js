@@ -1,19 +1,27 @@
+// Load environment variables from .env file
 require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const contactRouter = require('./routes/contact');
 
 const app = express();
 
+// Allow browser-based clients to call this API from different origins
 app.use(cors());
+
+// Parse incoming JSON request bodies
 app.use(express.json());
 
+// Mount the contact route
 app.use('/api/contact', contactRouter);
 
+// Handle unknown routes with JSON response
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Not found' });
 });
 
+// Global error handler for unexpected errors
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ success: false, message: 'Internal server error' });

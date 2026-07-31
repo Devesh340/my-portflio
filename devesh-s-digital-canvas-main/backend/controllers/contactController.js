@@ -4,6 +4,7 @@ let transporter;
 let senderEmail;
 let usingEthereal = false;
 
+// Initialize transporter once and reuse it for all requests.
 async function createTransporter() {
   if (transporter) return transporter;
 
@@ -19,6 +20,7 @@ async function createTransporter() {
     return transporter;
   }
 
+  // Development fallback to Ethereal if env vars are missing.
   usingEthereal = true;
   const testAccount = await nodemailer.createTestAccount();
   transporter = nodemailer.createTransport({
@@ -46,6 +48,7 @@ async function handleContactSubmission(req, res) {
 
     const { name, email, subject, message } = req.body || {};
 
+    // Validate required fields.
     if (!name || !email || !subject || !message) {
       return res.status(400).json({ success: false, message: 'All fields are required.' });
     }
@@ -62,12 +65,7 @@ async function handleContactSubmission(req, res) {
       replyTo: email,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-
-    if (usingEthereal) {
-      const previewUrl = nodemailer.getTestMessageUrl(info);
-      console.log('Ethereal preview URL:', previewUrl);
-    }
+    await transporter.sendMail(mailOptions);
 
     return res.json({ success: true, message: 'Message sent successfully!' });
   } catch (error) {
