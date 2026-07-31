@@ -443,7 +443,7 @@ function Nav({
               {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
             <a
-              href="/resume.pdf"
+              href="/devesh.docx"
               className="hidden items-center gap-2 rounded-lg gradient-bg px-4 py-2 text-sm font-medium text-white transition-transform hover:scale-[1.03] sm:inline-flex"
             >
               <Download className="h-4 w-4" /> Resume
@@ -481,7 +481,7 @@ function Nav({
                 ))}
               </div>
               <a
-                href="/resume.pdf"
+                href="/devesh.docx"
                 className="mt-2 flex items-center justify-center gap-2 rounded-lg gradient-bg px-4 py-2 text-sm font-medium text-white"
               >
                 <Download className="h-4 w-4" /> Resume
@@ -559,9 +559,9 @@ function Hero({ typed }: { typed: string }) {
 
           <div className="mt-10 grid max-w-md grid-cols-3 gap-4">
             {[
-              { label: "CGPA", val: 7.59, dec: 2, suffix: "" },
+              { label: "CGPA", val: 8, dec: 1, suffix: "" },
               { label: "Projects", val: 3, dec: 0, suffix: "+" },
-              { label: "Internships", val: 2, dec: 0, suffix: "" },
+              { label: "Internships", val: 3, dec: 0, suffix: "" },
             ].map((s) => (
               <div key={s.label} className="glass rounded-xl p-4 text-center">
                 <div className="font-display text-2xl font-bold gradient-text">
@@ -618,7 +618,7 @@ function About() {
     { k: "Phone", v: "+91 6369540458" },
     { k: "Degree", v: "Bachelor of Engineering" },
     { k: "Specialization", v: "Computer Science Engineering" },
-    { k: "CGPA", v: "7.59 / 10" },
+    { k: "CGPA", v: "8 / 10" },
     { k: "Focus", v: "Web · Data · AI" },
   ];
   return (
@@ -668,7 +668,7 @@ function Education() {
       place: "SNS Institutions, Coimbatore",
       sub: "Computer Science Engineering",
       period: "2024 – 2028",
-      score: "CGPA 7.59 / 10",
+      score: "CGPA 8 / 10",
     },
     {
       title: "Higher Secondary (12th)",
@@ -993,6 +993,7 @@ function Contact() {
     { icon: Phone, label: "Phone", value: "+91 6369540458", href: "tel:+916369540458" },
     { icon: MapPin, label: "Location", value: "Cuddalore, Tamil Nadu", href: "#" },
     { icon: Linkedin, label: "LinkedIn", value: "devesh-krishnan-off", href: "https://www.linkedin.com/in/devesh-krishnan-off" },
+    { icon: FileText, label: "Resume", value: "Download", href: "/devesh.docx" },
   ];
 
   return (
